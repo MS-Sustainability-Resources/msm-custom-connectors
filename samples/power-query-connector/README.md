@@ -9,7 +9,7 @@
 - [Create an environment](https://learn.microsoft.com/en-us/industry/sustainability/sustainability-manager-connector-build-power-query-template#step-1-create-an-environment)
 
 ### Step 2: Design Power Query Template
--[Design Power Query Template](https://learn.microsoft.com/en-us/industry/sustainability/sustainability-manager-import-data-power-query-templates#design-a-power-query-template)
+- [Design Power Query Template](https://learn.microsoft.com/en-us/industry/sustainability/sustainability-manager-import-data-power-query-templates#design-a-power-query-template)
 
 ### Step 3: Add DataFlow Template in Solution
 - Open the new solution you created in step 1. 
