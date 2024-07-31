@@ -9,12 +9,13 @@
 - [Create an environment](https://learn.microsoft.com/en-us/industry/sustainability/sustainability-manager-connector-build-power-query-template#step-1-create-an-environment)
 
 ### Step 2: Design Power Query Template
--[Design Power Query Template] (https://learn.microsoft.com/en-us/industry/sustainability/sustainability-manager-import-data-power-query-templates#design-a-power-query-template)
+-[Design Power Query Template](https://learn.microsoft.com/en-us/industry/sustainability/sustainability-manager-import-data-power-query-templates#design-a-power-query-template)
 
 ### Step 3: Add DataFlow Template in Solution
 - Open the new solution you created in step 1. 
 - Add the DataFlow template you created in step 2. Navigate to  Add existing--> More--> Other--> Dataflow Template
-- !image
+- <img width="851" alt="DataFlowTemplate" src="https://github.com/user-attachments/assets/6d076581-48b9-4d5d-8140-adfe7ce40f5f">
+
 
 ### Step 4: Export the solution
 - [Export the solution] (https://learn.microsoft.com/en-us/power-apps/maker/data-platform/export-solutions)
@@ -28,7 +29,7 @@
 ### Step 6: Modify msdyn_dataflowtemplates.xml
 - In the msdyn_dataflowtemplates.xml present in your solution add 'msdyn_dataflowtemplateid' attribute
 - copy the same value for 'msdyn_dataflowtemplateid' as given in msdyn_dataconnectors.xml
-- !image
+- <img width="508" alt="image" src="https://github.com/user-attachments/assets/06799241-4977-4867-b77a-80c694fa187b">
 
 ### Step 7: Zip your solution for testing.
 
