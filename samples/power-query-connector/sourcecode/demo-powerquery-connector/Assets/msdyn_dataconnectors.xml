@@ -1,0 +1,15 @@
+<msdyn_dataconnectors>
+  <msdyn_dataconnector msdyn_dataconnectorid="bc9e9b1e-45fa-4d6e-b799-9dcb49aaf981">
+  <msdyn_connectorstatus>700610001</msdyn_connectorstatus>
+  <msdyn_connectortype>700610007</msdyn_connectortype>
+  <msdyn_description>Demo Power Query templates connector</msdyn_description>
+  <msdyn_supportlinkurl>https://www.microsoft.com</msdyn_supportlinkurl>
+  <msdyn_logo_text>
+  </msdyn_logo_text>
+  <msdyn_name>Demo Power Query templates connector</msdyn_name>
+  <msdyn_title>Demo Power Query templates connector</msdyn_title>
+  <msdyn_dataflowtemplateid>
+    <msdyn_dataflowtemplateid>fb6ee8dd-b84c-4599-adb6-1812b3878052</msdyn_dataflowtemplateid>
+  </msdyn_dataflowtemplateid>
+  </msdyn_dataconnector>
+</msdyn_dataconnectors>

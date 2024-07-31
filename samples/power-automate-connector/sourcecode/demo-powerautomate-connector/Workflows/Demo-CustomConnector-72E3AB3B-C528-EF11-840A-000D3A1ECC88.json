@@ -1,0 +1,442 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "crb52_sharedcommondataserviceforapps_6e992"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "34ecddfc-08a9-4dc7-a226-c6e47dce5263"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "msdyn_dataimportjob",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/filterexpression": "_msdyn_dataconnector_value eq c5ee4458-ab35-4d89-bd90-b2df5bd5e337"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Get_connection_and_credential": {
+          "runAfter": {
+            "Initialize_array": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "c2fc971e-7d7d-4eef-8bcd-0cf166267674"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "GetItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "msdyn_dataconnections",
+              "recordId": "@triggerOutputs()?['body/_msdyn_dataconnection_value']",
+              "$expand": "msdyn_providercredentialid"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Parse_credential_secret_json": {
+          "runAfter": {
+            "Get_connection_and_credential": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "0e77e0d4-61bb-4577-b6d0-484ce676491f"
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": "@outputs('Get_connection_and_credential')?['body/msdyn_providercredentialid/msdyn_credentialsecret']",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "msmLanguageId": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "Try_-_Retrieve_data_from_API": {
+          "actions": {},
+          "runAfter": {
+            "Create_connection_refresh_record": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "7a8226ba-ee8b-43a8-90d7-fd7b8d4b072a"
+          },
+          "type": "Scope"
+        },
+        "Initialize_array": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "d2809e1a-7db0-4be7-9fd4-07538bcc59de"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "activities",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "Catch_-_Update_data_import_as_failure": {
+          "actions": {
+            "Update_data_connection_as_failed": {
+              "runAfter": {
+                "Apply_to_each_error": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "5b006849-3293-42a0-b7d1-a3eb6093a1fa"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "msdyn_dataconnections",
+                  "recordId": "@outputs('Get_connection_and_credential')?['body/msdyn_dataconnectionid']",
+                  "item/msdyn_dataconnectionstatus": 700610005
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Update_data_import_as_failed": {
+              "runAfter": {
+                "Update_data_connection_as_failed": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "cf2ece3a-12c5-4840-aae8-6cc2bec07c14"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "msdyn_dataimportjobs",
+                  "recordId": "@triggerOutputs()?['body/msdyn_dataimportjobid']",
+                  "item/msdyn_dataimportjobstatus": 700610005
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Compose_error_detail": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "4eec50a3-a728-475b-87cf-8626b22f8545"
+              },
+              "type": "Compose",
+              "inputs": "@result('Try_-_Retrieve_Data_from_API')"
+            },
+            "Parse_json_-_Error_detail": {
+              "runAfter": {
+                "Compose_error_detail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9bef8e52-b4bc-4660-92be-7bdc913f89d3"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@outputs('Compose_error_detail')",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "startTime": {
+                        "type": "string"
+                      },
+                      "endTime": {
+                        "type": "string"
+                      },
+                      "trackingId": {
+                        "type": "string"
+                      },
+                      "clientTrackingId": {
+                        "type": "string"
+                      },
+                      "clientKeywords": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "code": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "error": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "startTime",
+                      "endTime",
+                      "trackingId",
+                      "clientTrackingId",
+                      "clientKeywords",
+                      "code",
+                      "status",
+                      "error"
+                    ]
+                  }
+                }
+              }
+            },
+            "Apply_to_each_error": {
+              "foreach": "@body('Parse_json_-_Error_detail')",
+              "actions": {
+                "Update_Connection_Refresh_as_Failed": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "b77bc9ff-3461-47af-b026-f110a414ab62"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "msdyn_dataconnectionrefreshes",
+                      "recordId": "@outputs('Create_connection_refresh_record')?['body/msdyn_dataconnectionrefreshid']",
+                      "item/msdyn_startedat": "@items('Apply_to_each_error')['startTime']",
+                      "item/msdyn_errormessage": "@items('Apply_to_each_error')?['error']?['message']",
+                      "item/msdyn_errorsummaryjson": "@outputs('Compose_error_detail')",
+                      "item/msdyn_finishedat": "@items('Apply_to_each_error')['endTime']",
+                      "item/msdyn_refreshstatus": 192350003
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Parse_json_-_Error_detail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "91f85f46-bebd-43c7-afbb-825649837aa6"
+              },
+              "type": "Foreach"
+            }
+          },
+          "runAfter": {
+            "Try_-_Retrieve_data_from_API": [
+              "Failed",
+              "Skipped",
+              "TimedOut"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "7c6135f4-ebd2-4727-882a-6e0dfd8147c6"
+          },
+          "type": "Scope"
+        },
+        "Finally_-_Finalize_data_import": {
+          "actions": {
+            "Create_csv_table": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "82edea54-1e54-4549-8f68-36e64a460cd2"
+              },
+              "type": "Table",
+              "inputs": {
+                "from": "@variables('activities')",
+                "format": "CSV"
+              }
+            },
+            "Upload_CSV_table_to_connection_refresh": {
+              "runAfter": {
+                "Create_csv_table": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "e941a952-fe7c-463c-806e-863ee1bc704d"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateEntityFileImageFieldContent",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "msdyn_dataconnectionrefreshes",
+                  "recordId": "@outputs('Create_connection_refresh_record')?['body/msdyn_dataconnectionrefreshid']",
+                  "fileImageFieldName": "msdyn_thirdpartyflowdata",
+                  "item": "@body('Create_csv_table')",
+                  "x-ms-file-name": "Untitled"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Trigger_3rd_party_ingestion": {
+              "runAfter": {
+                "Upload_CSV_table_to_connection_refresh": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "8a7217bd-05b4-4bb3-83b7-86347464b8c2"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "PerformUnboundAction",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "actionName": "msdyn_trigger3PIngestionService"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Catch_-_Update_data_import_as_failure": [
+              "Skipped"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "342d176e-b4a0-4b7b-81fd-971a3799749e"
+          },
+          "type": "Scope"
+        },
+        "Create_data_connection_map_record": {
+          "runAfter": {
+            "Parse_credential_secret_json": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "ee888c1c-bbdc-45c9-89f2-8f49a1e05599"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "msdyn_sustainabilitydataconnectionmaps",
+              "item/msdyn_dataconnection@odata.bind": "/msdyn_dataconnections(msdyn_dataconnectionid=@{outputs('Get_connection_and_credential')?['body/msdyn_dataconnectionid']})",
+              "item/msdyn_datadefinition@odata.bind": "/msdyn_sustainabilitydatadefinitions(msdyn_sustainabilitydatadefinitionid=35c356cc-3edb-44aa-8243-9ad44f4d6ed4)",
+              "item/msdyn_name": "Map-@{guid()}",
+              "item/msdyn_map": "\"test map\""
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Create_connection_refresh_record": {
+          "runAfter": {
+            "Create_data_connection_map_record": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "60e3f3a5-3fc5-4b3a-bdb9-920ccc21d369"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "CreateRecord",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "entityName": "msdyn_dataconnectionrefreshes",
+              "item/msdyn_dataconnection@odata.bind": "/msdyn_dataconnections(msdyn_dataconnectionid=@{outputs('Get_connection_and_credential')?['body/msdyn_dataconnectionid']})",
+              "item/msdyn_dataflowid": "democonnector-",
+              "item/msdyn_dataflowname": "democonnector",
+              "item/msdyn_name": "democonnector-@{guid()}",
+              "item/msdyn_nextrefresh": "@utcNow()",
+              "item/msdyn_startedat": "@utcNow()",
+              "item/msdyn_dataconnectionmap@odata.bind": "/msdyn_sustainabilitydataconnectionmaps(msdyn_sustainabilitydataconnectionmapid=@{outputs('Create_data_connection_map_record')?['body/msdyn_sustainabilitydataconnectionmapid']})",
+              "item/msdyn_dataimportjob@odata.bind": "/msdyn_dataimportjobs(msdyn_dataimportjobid=@{triggerOutputs()?['body/msdyn_dataimportjobid']})"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

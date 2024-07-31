@@ -1,0 +1,66 @@
+<msdyn_dataconnectors>
+  <msdyn_dataconnector msdyn_dataconnectorid="c5ee4458-ab35-4d89-bd90-b2df5bd5e337">
+    <iscustomizable>1</iscustomizable>
+    <msdyn_connectorstatus>700610001</msdyn_connectorstatus>
+    <msdyn_connectortype>700610006</msdyn_connectortype>
+    <msdyn_description>Demo 3P connector</msdyn_description>
+    <msdyn_name>Demo 3P Connector</msdyn_name>
+    <msdyn_parameterconfiguration>{
+    "parameterGroups": [
+        {
+            "label": "Login",
+            "fields": [
+                {
+                    "displayLabel": "Username",
+                    "type": "text",
+                    "key": "username",
+                    "required": true,
+                    "description": "Enter the username to login with"
+                },
+                {
+                    "displayLabel": "Password",
+                    "type": "text",
+                    "key": "password",
+                    "mask": true,
+                    "required": true
+                }
+            ]
+        },
+        {
+            "label": "Data extraction parameters",
+            "fields": [
+                {
+                    "displayLabel": "Watermark Date",
+                    "type": "datetime",
+                    "key": "watermarkDate"
+                },
+                {
+                    "displayLabel": "Organization Unit",
+                    "type": "text",
+                    "key": "organizationUnit"
+                },
+                {
+                    "displayLabel": "Facility",
+                    "type": "text",
+                    "key": "facility"
+                },
+                {
+                    "displayLabel": "Installation instructions",
+                    "type": "note",
+                    "text": "To use this connector, you should first create an environment variable that contains the login credentials. Then create a flow that uses this connector."
+                },
+                { 
+                    "displayLabel": "How to create an environment variable in Azure Key Vault",
+                    "type": "link",
+                    "url": "https://docs.microsoft.com/azure/azure-functions/functions-how-to-use-azure-function-app-settings#settings"
+                }
+            ]
+         }
+   ]
+}</msdyn_parameterconfiguration>
+    <msdyn_supportlinkurl>https://www.microsoft.com</msdyn_supportlinkurl>
+    <msdyn_title>Demo 3P Connector</msdyn_title>
+    <statecode>0</statecode>
+    <statuscode>1</statuscode>
+  </msdyn_dataconnector>
+</msdyn_dataconnectors>
