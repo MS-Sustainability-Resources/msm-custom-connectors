@@ -10,7 +10,7 @@
 
 ### Step 2: Design Power Query Template
 - [Design Power Query Template](https://learn.microsoft.com/en-us/industry/sustainability/sustainability-manager-import-data-power-query-templates#design-a-power-query-template)
-
+- Remember to add parameters. Substitute parameters in the query connection using advanced editor. [https://learn.microsoft.com/en-us/power-query/power-query-query-parameters]
 ### Step 3: Add DataFlow Template in Solution
 - Open the new solution you created in step 1. 
 - Add the DataFlow template you created in step 2. Navigate to  Add existing--> More--> Other--> Dataflow Template
