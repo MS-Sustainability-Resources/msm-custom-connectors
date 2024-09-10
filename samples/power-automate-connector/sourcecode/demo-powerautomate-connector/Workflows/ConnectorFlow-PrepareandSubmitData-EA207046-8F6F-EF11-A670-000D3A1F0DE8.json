@@ -1,0 +1,947 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "msdyn_sharedcommondataserviceforapps_94ea0"
+        },
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_row_is_added,_modified_or_deleted": {
+          "metadata": {
+            "operationMetadataId": "40b5097e-3526-42cf-a50a-fd56cfdf7b2e"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_commondataserviceforapps",
+              "operationId": "SubscribeWebhookTrigger",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+            },
+            "parameters": {
+              "subscriptionRequest/message": 1,
+              "subscriptionRequest/entityname": "msdyn_dataimportjob",
+              "subscriptionRequest/scope": 4,
+              "subscriptionRequest/filterexpression": "_msdyn_dataconnector_value eq c5ee4458-ab35-4d89-bd90-b2df5bd5e337"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Initialize_output_activities_array": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "d2809e1a-7db0-4be7-9fd4-07538bcc59de"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "activities",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "Initialize_source_activities_array": {
+          "runAfter": {
+            "Initialize_output_activities_array": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "7ba83b30-07af-494c-9c98-3bee9d8dad93"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "sourceData",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "Initialize_data_connection_map_guid": {
+          "runAfter": {
+            "Initialize_source_activities_array": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "6c9edc46-0531-4b34-b729-fa61593a7359"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Data connection map guid",
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "Initialize_data_mappings": {
+          "runAfter": {
+            "Initialize_data_connection_map_guid": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "049aa7fb-850f-4711-8168-572a1b536bc4"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Data mappings",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "Initialize_connector": {
+          "actions": {
+            "Get_connection_and_connector_parameters": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "c2fc971e-7d7d-4eef-8bcd-0cf166267674"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "GetItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "msdyn_dataconnections",
+                  "recordId": "@triggerOutputs()?['body/_msdyn_dataconnection_value']",
+                  "$expand": "msdyn_providercredentialid"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Get_existing_data_connection_map_record": {
+              "runAfter": {
+                "Get_connection_and_connector_parameters": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "77582528-2e9b-41a3-a9d6-eaf5af616fe6"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "msdyn_sustainabilitydataconnectionmaps",
+                  "fetchXml": "<fetch version=\"1.0\" output-format=\"xml-platform\" mapping=\"logical\" distinct=\"false\">\n<entity name=\"msdyn_sustainabilitydataconnectionmap\">\n<attribute name=\"msdyn_sustainabilitydataconnectionmapid\"/>\n<attribute name=\"msdyn_name\"/>\n<attribute name=\"createdon\"/>\n<order attribute=\"msdyn_name\" descending=\"false\"/>\n<filter type=\"and\">\n<condition attribute=\"msdyn_dataconnection\" operator=\"eq\" uitype=\"msdyn_dataconnection\" value=\"{@{outputs('Get_connection_and_connector_parameters')?['body/msdyn_dataconnectionid']}}\"/>\n</filter>\n</entity>\n</fetch>",
+                  "$top": 1
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "If_no_connection_map_exists,_create_one_and_set": {
+              "actions": {
+                "Create_data_connection_map_record_for_purchased_energy": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "ee888c1c-bbdc-45c9-89f2-8f49a1e05599"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "CreateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "msdyn_sustainabilitydataconnectionmaps",
+                      "item/msdyn_dataconnection@odata.bind": "/msdyn_dataconnections(msdyn_dataconnectionid=@{outputs('Get_connection_and_connector_parameters')?['body/msdyn_dataconnectionid']})",
+                      "item/msdyn_datadefinition@odata.bind": "/msdyn_sustainabilitydatadefinitions(msdyn_sustainabilitydatadefinitionid=35c356cc-3edb-44aa-8243-9ad44f4d6ed4)",
+                      "item/msdyn_name": "PurchasedEnergyMap-@{guid()}",
+                      "item/msdyn_map": "\"Fexillon Connector Map for Purchased Energy\""
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Set_variable_by_new_map_record": {
+                  "runAfter": {
+                    "Create_data_connection_map_record_for_purchased_energy": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "3a18d260-e701-43ca-9d9c-4c89f83f9465"
+                  },
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "Data connection map guid",
+                    "value": "@outputs('Create_data_connection_map_record_for_purchased_energy')?['body/msdyn_sustainabilitydataconnectionmapid']"
+                  }
+                }
+              },
+              "runAfter": {
+                "Get_existing_data_connection_map_record": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Apply_to_each": {
+                    "foreach": "@outputs('Get_existing_data_connection_map_record')?['body/value']",
+                    "actions": {
+                      "Set_variable_by_existing_map_record": {
+                        "runAfter": {},
+                        "metadata": {
+                          "operationMetadataId": "0ee11a53-0b99-4dbb-be18-1dbb5ba65518"
+                        },
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "Data connection map guid",
+                          "value": "@items('Apply_to_each')?['msdyn_sustainabilitydataconnectionmapid']"
+                        }
+                      }
+                    },
+                    "runAfter": {},
+                    "metadata": {
+                      "operationMetadataId": "b72437ed-7f73-4441-b718-120315ebba28"
+                    },
+                    "type": "Foreach"
+                  }
+                }
+              },
+              "expression": {
+                "equals": [
+                  "@length(outputs('Get_existing_data_connection_map_record')?['body/value'])",
+                  0
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "3d988292-4a37-45e2-a959-8872b4979779"
+              },
+              "type": "If"
+            },
+            "Create_connection_refresh_record": {
+              "runAfter": {
+                "If_no_connection_map_exists,_create_one_and_set": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "60e3f3a5-3fc5-4b3a-bdb9-920ccc21d369"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "CreateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "msdyn_dataconnectionrefreshes",
+                  "item/msdyn_dataconnection@odata.bind": "/msdyn_dataconnections(msdyn_dataconnectionid=@{outputs('Get_connection_and_connector_parameters')?['body/msdyn_dataconnectionid']})",
+                  "item/msdyn_dataflowid": "fexconnector-@{triggerOutputs()?['body/msdyn_dataimportjobid']}",
+                  "item/msdyn_dataflowname": "fexconnector",
+                  "item/msdyn_name": "fexconnector-@{guid()}",
+                  "item/msdyn_nextrefresh": "@utcNow()",
+                  "item/msdyn_startedat": "@utcNow()",
+                  "item/msdyn_dataconnectionmap@odata.bind": "/msdyn_sustainabilitydataconnectionmaps(msdyn_sustainabilitydataconnectionmapid=@{variables('Data connection map guid')})",
+                  "item/msdyn_dataimportjob@odata.bind": "/msdyn_dataimportjobs(msdyn_dataimportjobid=@{triggerOutputs()?['body/msdyn_dataimportjobid']})"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Get_Data_Mappings": {
+              "runAfter": {
+                "Create_connection_refresh_record": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "46543db0-e3e6-44ed-a92f-8f5c4cb4c79f"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "ListRecords",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "crb52_customconnectormaps",
+                  "$filter": "statecode eq 0"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Loop_through_data_mappings": {
+              "foreach": "@outputs('Get_Data_Mappings')?['body/value']",
+              "actions": {
+                "Append_to_mappings_array": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "5ca11f82-3a49-4d14-8474-6c06c23d2634"
+                  },
+                  "type": "AppendToArrayVariable",
+                  "inputs": {
+                    "name": "Data mappings",
+                    "value": {
+                      "key": "@{items('Loop_through_data_mappings')?['crb52_msmtable']}-@{items('Loop_through_data_mappings')?['crb52_externalname']}",
+                      "value": "@{items('Loop_through_data_mappings')?['crb52_msmid']}"
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Get_Data_Mappings": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "cd9621c4-13bc-46f0-a73e-5c4478d076fb"
+              },
+              "type": "Foreach",
+              "runtimeConfiguration": {
+                "concurrency": {
+                  "repetitions": 20
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_data_mappings": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "d7fc84b5-5ed9-42a7-a699-be03da191420"
+          },
+          "type": "Scope"
+        },
+        "Try_-_Get_Records_from_Source": {
+          "actions": {
+            "Append_to_array_variable": {
+              "runAfter": {
+                "Compose_Target_Data": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "1bfcb4a1-e4c4-4c83-ab69-57368f83fca0"
+              },
+              "type": "AppendToArrayVariable",
+              "inputs": {
+                "name": "activities",
+                "value": "@outputs('Compose_Target_Data')"
+              }
+            },
+            "Get_Quantity_Unit": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "1a1cab2b-53b9-4da9-8ec4-9e0596ee9818"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@variables('Data mappings')",
+                "where": "@equals(item()['key'], 'msdyn_unit-kWh')"
+              }
+            },
+            "Compose_Target_Data": {
+              "runAfter": {
+                "Get_Contractual_Instrument_Type": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "808a4b08-9c88-43c6-b0c3-f9515386e67d"
+              },
+              "type": "Compose",
+              "inputs": {
+                "msdyn_name": "Demo data",
+                "msdyn_consumptionenddate": "1/1/2024",
+                "msdyn_energytype": "@first(body('Get_Energy_Type'))?['value']",
+                "msdyn_quantity": 1000,
+                "msdyn_quantityunit": "@{first(body('Get_Quantity_Unit'))?['value']}",
+                "msdyn_consumptionstartdate": "1/1/2023",
+                "msdyn_dataqualitytype": 700610000,
+                "msdyn_energyprovidername": "Demo Provider",
+                "msdyn_isrenewable": 1,
+                "msdyn_facilityid": "@{first(body('Get_Facility'))?['value']}",
+                "msdyn_organizationalunitid": "@{first(body('Get_Organizational_Unit'))?['value']}",
+                "msdyn_contractualinstrumenttypeid": "@{first(body('Get_Contractual_Instrument_Type'))?['value']}",
+                "msdyn_countryregioncode": "",
+                "msdyn_origincorrelationid": "Activity-1",
+                "msdyn_description": "",
+                "msdyn_evidence": ""
+              }
+            },
+            "Get_Facility": {
+              "runAfter": {
+                "Get_Quantity_Unit": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "1a1cab2b-53b9-4da9-8ec4-9e0596ee9818"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@variables('Data mappings')",
+                "where": "@equals(item()['key'], 'msdyn_facility-Contoso Factory')"
+              }
+            },
+            "Get_Organizational_Unit": {
+              "runAfter": {
+                "Get_Facility": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "1a1cab2b-53b9-4da9-8ec4-9e0596ee9818"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@variables('Data mappings')",
+                "where": "@equals(item()['key'], 'msdyn_sustainabilityorganizationalunit-Contoso USA')"
+              }
+            },
+            "Get_Energy_Type": {
+              "runAfter": {
+                "Get_Organizational_Unit": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "1a1cab2b-53b9-4da9-8ec4-9e0596ee9818"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@variables('Data mappings')",
+                "where": "@equals(item()['key'], 'msdyn_energytype-Electricity')"
+              }
+            },
+            "Get_Contractual_Instrument_Type": {
+              "runAfter": {
+                "Get_Energy_Type": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "1a1cab2b-53b9-4da9-8ec4-9e0596ee9818"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@variables('Data mappings')",
+                "where": "@equals(item()['key'], 'msdyn_contractualinstrumenttype-Utility Company Grid Energy')"
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_connector": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "7a8226ba-ee8b-43a8-90d7-fd7b8d4b072a"
+          },
+          "type": "Scope"
+        },
+        "Catch_-_Update_data_import_as_failure": {
+          "actions": {
+            "Update_data_connection_as_failed": {
+              "runAfter": {
+                "Apply_to_each_error": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "5b006849-3293-42a0-b7d1-a3eb6093a1fa"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "msdyn_dataconnections",
+                  "recordId": "@outputs('Get_connection_and_connector_parameters')?['body/msdyn_dataconnectionid']",
+                  "item/msdyn_dataconnectionstatus": 700610005
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Update_data_import_as_failed": {
+              "runAfter": {
+                "Update_data_connection_as_failed": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "cf2ece3a-12c5-4840-aae8-6cc2bec07c14"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_commondataserviceforapps",
+                  "operationId": "UpdateRecord",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                },
+                "parameters": {
+                  "entityName": "msdyn_dataimportjobs",
+                  "recordId": "@triggerOutputs()?['body/msdyn_dataimportjobid']",
+                  "item/msdyn_dataimportjobstatus": 700610005
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Compose_error_detail": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "4eec50a3-a728-475b-87cf-8626b22f8545"
+              },
+              "type": "Compose",
+              "inputs": "@result('Try_-_Get_Records_from_Source')"
+            },
+            "Parse_json_-_Error_detail": {
+              "runAfter": {
+                "Compose_error_detail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "9bef8e52-b4bc-4660-92be-7bdc913f89d3"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@outputs('Compose_error_detail')",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": {
+                      "type": "number"
+                    },
+                    "assessments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "statusHistory": {
+                            "type": "object",
+                            "properties": {
+                              "NS": {
+                                "type": "string"
+                              },
+                              "ASI": {
+                                "type": "string"
+                              },
+                              "ASC": {
+                                "type": "string"
+                              },
+                              "VRP": {
+                                "type": "string"
+                              },
+                              "VRQ": {
+                                "type": "string"
+                              },
+                              "VRE": {
+                                "type": "string"
+                              },
+                              "VRC": {
+                                "type": "string"
+                              },
+                              "VRF": {
+                                "type": "string"
+                              },
+                              "VRD": {
+                                "type": "string"
+                              },
+                              "VRI": {
+                                "type": "string"
+                              },
+                              "ASD": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "version": {
+                            "type": "string"
+                          },
+                          "accountId": {
+                            "type": "string"
+                          },
+                          "accountName": {
+                            "type": "string"
+                          },
+                          "sacId": {
+                            "type": "number"
+                          },
+                          "country": {
+                            "type": "string"
+                          },
+                          "selfPosted": {
+                            "type": "boolean"
+                          },
+                          "verifiedPosted": {
+                            "type": "boolean"
+                          },
+                          "verified": {
+                            "type": "boolean"
+                          },
+                          "createdOn": {
+                            "type": "number"
+                          },
+                          "lastUpdated": {
+                            "type": "number"
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "address": {
+                                "type": "string"
+                              },
+                              "vicinity": {
+                                "type": "string"
+                              },
+                              "country": {
+                                "type": "string"
+                              },
+                              "placeid": {
+                                "type": "string"
+                              },
+                              "lat": {
+                                "type": "number"
+                              },
+                              "long": {
+                                "type": "number"
+                              }
+                            }
+                          },
+                          "oarId": {
+                            "type": "string"
+                          },
+                          "ffcId": {
+                            "type": "string"
+                          },
+                          "taxId": {
+                            "type": "string"
+                          },
+                          "socialCreditId": {
+                            "type": "string"
+                          },
+                          "parentCompanyId": {
+                            "type": "string"
+                          },
+                          "parentCompanyName": {
+                            "type": "string"
+                          },
+                          "parentCompanySacId": {
+                            "type": "string"
+                          },
+                          "v1VerifiedId": {
+                            "type": "string"
+                          },
+                          "tags": {
+                            "type": "array"
+                          },
+                          "statusNotes": {
+                            "type": "string"
+                          },
+                          "cadence": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "verifierBodyName": {
+                            "type": "string"
+                          },
+                          "verifierType": {
+                            "type": "string"
+                          },
+                          "verifierStartDate": {
+                            "type": "string"
+                          },
+                          "verifierEndDate": {
+                            "type": "string"
+                          },
+                          "usage": {
+                            "type": "object",
+                            "properties": {
+                              "self": {
+                                "type": "object",
+                                "properties": {
+                                  "ensourcenaturalgastotal": {
+                                    "type": "number"
+                                  },
+                                  "ensourceelectricpurchtotal": {
+                                    "type": "number"
+                                  },
+                                  "ensourcetotal": {
+                                    "type": "number"
+                                  },
+                                  "wstsourcenhplastictotal": {
+                                    "type": "number"
+                                  },
+                                  "wstsourcetotal": {
+                                    "type": "number"
+                                  },
+                                  "ensourceelectricpurchtotalgwp": {
+                                    "type": "number"
+                                  },
+                                  "ensourceelectricpurchtotalghg": {
+                                    "type": "number"
+                                  },
+                                  "tier2count": {
+                                    "type": "number"
+                                  },
+                                  "tier3count": {
+                                    "type": "number"
+                                  },
+                                  "tier4count": {
+                                    "type": "number"
+                                  },
+                                  "ensourcenaturalgastotalghg": {
+                                    "type": "number"
+                                  },
+                                  "totalNonRenewableEnergyEmissions": {
+                                    "type": "number"
+                                  },
+                                  "tier1count": {
+                                    "type": "number"
+                                  },
+                                  "totalNonRenewableEmissions": {
+                                    "type": "number"
+                                  },
+                                  "totalGHGemissions": {
+                                    "type": "number"
+                                  },
+                                  "totalNormalizedGHGemissions": {
+                                    "type": "number"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "statusHistory",
+                          "status",
+                          "version",
+                          "accountId",
+                          "accountName",
+                          "sacId",
+                          "country",
+                          "selfPosted",
+                          "verifiedPosted",
+                          "verified",
+                          "createdOn",
+                          "lastUpdated",
+                          "location",
+                          "oarId",
+                          "ffcId",
+                          "taxId",
+                          "socialCreditId",
+                          "parentCompanyId",
+                          "parentCompanyName",
+                          "parentCompanySacId",
+                          "v1VerifiedId",
+                          "tags",
+                          "statusNotes",
+                          "cadence",
+                          "verifierBodyName",
+                          "verifierType",
+                          "verifierStartDate",
+                          "verifierEndDate",
+                          "usage"
+                        ]
+                      }
+                    },
+                    "from": {
+                      "type": "number"
+                    },
+                    "size": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            },
+            "Apply_to_each_error": {
+              "foreach": "@body('Parse_json_-_Error_detail')",
+              "actions": {
+                "Update_Connection_Refresh_as_Failed": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "b77bc9ff-3461-47af-b026-f110a414ab62"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateRecord",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "msdyn_dataconnectionrefreshes",
+                      "recordId": "@outputs('Create_connection_refresh_record')?['body/msdyn_dataconnectionrefreshid']",
+                      "item/msdyn_startedat": "@items('Apply_to_each_error')['startTime']",
+                      "item/msdyn_errormessage": "@items('Apply_to_each_error')?['error']?['message']",
+                      "item/msdyn_errorsummaryjson": "@outputs('Compose_error_detail')",
+                      "item/msdyn_finishedat": "@items('Apply_to_each_error')['endTime']",
+                      "item/msdyn_refreshstatus": 192350003
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Parse_json_-_Error_detail": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "91f85f46-bebd-43c7-afbb-825649837aa6"
+              },
+              "type": "Foreach"
+            }
+          },
+          "runAfter": {
+            "Try_-_Get_Records_from_Source": [
+              "Failed",
+              "Skipped",
+              "TimedOut"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "7c6135f4-ebd2-4727-882a-6e0dfd8147c6"
+          },
+          "type": "Scope"
+        },
+        "Finally_-_Finalize_data_import": {
+          "actions": {
+            "Create_csv_table": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "82edea54-1e54-4549-8f68-36e64a460cd2"
+              },
+              "type": "Table",
+              "inputs": {
+                "from": "@variables('activities')",
+                "format": "CSV"
+              }
+            },
+            "Check_if_any_records_to_import": {
+              "actions": {
+                "Upload_CSV_table_to_connection_refresh": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "e941a952-fe7c-463c-806e-863ee1bc704d"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "UpdateEntityFileImageFieldContent",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "entityName": "msdyn_dataconnectionrefreshes",
+                      "recordId": "@outputs('Create_connection_refresh_record')?['body/msdyn_dataconnectionrefreshid']",
+                      "fileImageFieldName": "msdyn_thirdpartyflowdata",
+                      "item": "@body('Create_csv_table')",
+                      "x-ms-file-name": "Untitled"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Trigger_3rd_party_ingestion": {
+                  "runAfter": {
+                    "Upload_CSV_table_to_connection_refresh": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "operationMetadataId": "8a7217bd-05b4-4bb3-83b7-86347464b8c2"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "PerformUnboundAction",
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
+                    },
+                    "parameters": {
+                      "actionName": "msdyn_trigger3PIngestionService",
+                      "item/dataImportJobId": "@triggerOutputs()?['body/msdyn_dataimportjobid']"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Create_csv_table": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "greater": [
+                  "@length(body('Create_csv_table'))",
+                  0
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "aafb419e-75bc-495b-b0b3-784af8d9b5c7"
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Catch_-_Update_data_import_as_failure": [
+              "Skipped"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "342d176e-b4a0-4b7b-81fd-971a3799749e"
+          },
+          "type": "Scope"
+        }
+      }
+    },
+    "templateName": ""
+  },
+  "schemaVersion": "1.0.0.0"
+}

@@ -1,11 +1,11 @@
-<ImportExportXml version="9.2.24051.210" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ImportExportXml version="9.2.24074.218" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SolutionManifest>
     <UniqueName>DemoConnector</UniqueName>
     <LocalizedNames>
       <LocalizedName description="Demo Connector" languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.0.6</Version>
+    <Version>1.0.0.9</Version>
     <Managed>0</Managed>
     <Publisher>
       <UniqueName>Cr26cae</UniqueName>
@@ -77,32 +77,33 @@
       </Addresses>
     </Publisher>
     <RootComponents>
-      <RootComponent type="29" id="{72e3ab3b-c528-ef11-840a-000d3a1ecc88}" behavior="0" />
+      <RootComponent type="1" schemaName="crb52_customconnectormap" behavior="0" />
+      <RootComponent type="29" id="{ea207046-8f6f-ef11-a670-000d3a1f0de8}" behavior="0" />
     </RootComponents>
     <MissingDependencies>
       <MissingDependency>
-        <Required type="1" schemaName="msdyn_dataconnection" displayName="Connection" solution="msdyn_SustainabilityApplication (2.19.0.289)">
-          <package>msdyn_SustainabilityPremiumAnchor (2.19.0.289)</package>
+        <Required type="1" schemaName="msdyn_dataconnection" displayName="Connection" solution="msdyn_SustainabilityApplication (2.22.0.159)">
+          <package>msdyn_SustainabilityPremiumAnchor (2.22.0.159)</package>
         </Required>
-        <Dependent type="29" displayName="Demo - Custom Connector" id="{72e3ab3b-c528-ef11-840a-000d3a1ecc88}" />
+        <Dependent type="29" displayName="Connector Flow - Prepare and Submit Data" id="{ea207046-8f6f-ef11-a670-000d3a1f0de8}" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="1" schemaName="msdyn_dataconnectionrefresh" displayName="Connection refresh" solution="msdyn_SustainabilityApplication (2.19.0.289)">
-          <package>msdyn_SustainabilityPremiumAnchor (2.19.0.289)</package>
+        <Required type="1" schemaName="msdyn_dataconnectionrefresh" displayName="Connection refresh" solution="msdyn_SustainabilityApplication (2.22.0.159)">
+          <package>msdyn_SustainabilityPremiumAnchor (2.22.0.159)</package>
         </Required>
-        <Dependent type="29" displayName="Demo - Custom Connector" id="{72e3ab3b-c528-ef11-840a-000d3a1ecc88}" />
+        <Dependent type="29" displayName="Connector Flow - Prepare and Submit Data" id="{ea207046-8f6f-ef11-a670-000d3a1f0de8}" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="1" schemaName="msdyn_dataimportjob" displayName="Data import job" solution="msdyn_SustainabilityApplication (2.19.0.289)">
-          <package>msdyn_SustainabilityPremiumAnchor (2.19.0.289)</package>
+        <Required type="1" schemaName="msdyn_dataimportjob" displayName="Data import job" solution="msdyn_SustainabilityApplication (2.22.0.159)">
+          <package>msdyn_SustainabilityPremiumAnchor (2.22.0.159)</package>
         </Required>
-        <Dependent type="29" displayName="Demo - Custom Connector" id="{72e3ab3b-c528-ef11-840a-000d3a1ecc88}" />
+        <Dependent type="29" displayName="Connector Flow - Prepare and Submit Data" id="{ea207046-8f6f-ef11-a670-000d3a1f0de8}" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="1" schemaName="msdyn_sustainabilitydataconnectionmap" displayName="Sustainability data connection map" solution="msdyn_SustainabilityApplication (2.19.0.289)">
-          <package>msdyn_SustainabilityPremiumAnchor (2.19.0.289)</package>
+        <Required type="1" schemaName="msdyn_sustainabilitydataconnectionmap" displayName="Sustainability data connection map" solution="msdyn_SustainabilityApplication (2.22.0.159)">
+          <package>msdyn_SustainabilityPremiumAnchor (2.22.0.159)</package>
         </Required>
-        <Dependent type="29" displayName="Demo - Custom Connector" id="{72e3ab3b-c528-ef11-840a-000d3a1ecc88}" />
+        <Dependent type="29" displayName="Connector Flow - Prepare and Submit Data" id="{ea207046-8f6f-ef11-a670-000d3a1f0de8}" />
       </MissingDependency>
     </MissingDependencies>
   </SolutionManifest>
