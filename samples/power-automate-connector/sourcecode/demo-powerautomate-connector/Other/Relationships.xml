@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityRelationships xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityRelationship Name="business_unit_crb52_customconnectormap" />
+  <EntityRelationship Name="lk_crb52_customconnectormap_createdby" />
+  <EntityRelationship Name="lk_crb52_customconnectormap_modifiedby" />
+  <EntityRelationship Name="owner_crb52_customconnectormap" />
+  <EntityRelationship Name="team_crb52_customconnectormap" />
+  <EntityRelationship Name="user_crb52_customconnectormap" />
+</EntityRelationships>

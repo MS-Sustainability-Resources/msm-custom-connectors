@@ -1,10 +1,10 @@
 {
   "properties": {
     "connectionReferences": {
-      "shared_commondataserviceforapps": {
+      "shared_commondataserviceforapps_1": {
         "runtimeSource": "embedded",
         "connection": {
-          "connectionReferenceLogicalName": "msdyn_sharedcommondataserviceforapps_94ea0"
+          "connectionReferenceLogicalName": "crb52_sharedcommondataserviceforapps_6e992"
         },
         "api": {
           "name": "shared_commondataserviceforapps"
@@ -32,7 +32,7 @@
           "type": "OpenApiConnectionWebhook",
           "inputs": {
             "host": {
-              "connectionName": "shared_commondataserviceforapps",
+              "connectionName": "shared_commondataserviceforapps_1",
               "operationId": "SubscribeWebhookTrigger",
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
             },
@@ -129,7 +129,7 @@
               "type": "OpenApiConnection",
               "inputs": {
                 "host": {
-                  "connectionName": "shared_commondataserviceforapps",
+                  "connectionName": "shared_commondataserviceforapps_1",
                   "operationId": "GetItem",
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                 },
@@ -153,7 +153,7 @@
               "type": "OpenApiConnection",
               "inputs": {
                 "host": {
-                  "connectionName": "shared_commondataserviceforapps",
+                  "connectionName": "shared_commondataserviceforapps_1",
                   "operationId": "ListRecords",
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                 },
@@ -175,7 +175,7 @@
                   "type": "OpenApiConnection",
                   "inputs": {
                     "host": {
-                      "connectionName": "shared_commondataserviceforapps",
+                      "connectionName": "shared_commondataserviceforapps_1",
                       "operationId": "CreateRecord",
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                     },
@@ -258,16 +258,16 @@
               "type": "OpenApiConnection",
               "inputs": {
                 "host": {
-                  "connectionName": "shared_commondataserviceforapps",
+                  "connectionName": "shared_commondataserviceforapps_1",
                   "operationId": "CreateRecord",
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                 },
                 "parameters": {
                   "entityName": "msdyn_dataconnectionrefreshes",
                   "item/msdyn_dataconnection@odata.bind": "/msdyn_dataconnections(msdyn_dataconnectionid=@{outputs('Get_connection_and_connector_parameters')?['body/msdyn_dataconnectionid']})",
-                  "item/msdyn_dataflowid": "fexconnector-@{triggerOutputs()?['body/msdyn_dataimportjobid']}",
-                  "item/msdyn_dataflowname": "fexconnector",
-                  "item/msdyn_name": "fexconnector-@{guid()}",
+                  "item/msdyn_dataflowid": "msmconnector-@{triggerOutputs()?['body/msdyn_dataimportjobid']}",
+                  "item/msdyn_dataflowname": "msmconnector",
+                  "item/msdyn_name": "msmconnector-@{guid()}",
                   "item/msdyn_nextrefresh": "@utcNow()",
                   "item/msdyn_startedat": "@utcNow()",
                   "item/msdyn_dataconnectionmap@odata.bind": "/msdyn_sustainabilitydataconnectionmaps(msdyn_sustainabilitydataconnectionmapid=@{variables('Data connection map guid')})",
@@ -288,7 +288,7 @@
               "type": "OpenApiConnection",
               "inputs": {
                 "host": {
-                  "connectionName": "shared_commondataserviceforapps",
+                  "connectionName": "shared_commondataserviceforapps_1",
                   "operationId": "ListRecords",
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                 },
@@ -485,7 +485,7 @@
               "type": "OpenApiConnection",
               "inputs": {
                 "host": {
-                  "connectionName": "shared_commondataserviceforapps",
+                  "connectionName": "shared_commondataserviceforapps_1",
                   "operationId": "UpdateRecord",
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                 },
@@ -509,7 +509,7 @@
               "type": "OpenApiConnection",
               "inputs": {
                 "host": {
-                  "connectionName": "shared_commondataserviceforapps",
+                  "connectionName": "shared_commondataserviceforapps_1",
                   "operationId": "UpdateRecord",
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                 },
@@ -811,7 +811,7 @@
                   "type": "OpenApiConnection",
                   "inputs": {
                     "host": {
-                      "connectionName": "shared_commondataserviceforapps",
+                      "connectionName": "shared_commondataserviceforapps_1",
                       "operationId": "UpdateRecord",
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                     },
@@ -874,7 +874,7 @@
                   "type": "OpenApiConnection",
                   "inputs": {
                     "host": {
-                      "connectionName": "shared_commondataserviceforapps",
+                      "connectionName": "shared_commondataserviceforapps_1",
                       "operationId": "UpdateEntityFileImageFieldContent",
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                     },
@@ -900,7 +900,7 @@
                   "type": "OpenApiConnection",
                   "inputs": {
                     "host": {
-                      "connectionName": "shared_commondataserviceforapps",
+                      "connectionName": "shared_commondataserviceforapps_1",
                       "operationId": "PerformUnboundAction",
                       "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps"
                     },
