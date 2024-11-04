@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <systemform>
+    <formid>{3d9e3efc-cd8f-43ed-ad0a-2c9ebdc0ed00}</formid>
+    <IntroducedVersion>1.0</IntroducedVersion>
+    <FormPresentation>1</FormPresentation>
+    <FormActivationState>1</FormActivationState>
+    <form>
+      <tabs>
+        <tab verticallayout="true" id="{554a45f4-9585-42af-ae96-aa6c948b239e}" IsUserDefined="1">
+          <labels>
+            <label description="General" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="100%">
+              <sections>
+                <section showlabel="false" showbar="false" IsUserDefined="0" id="{918906db-5dd7-4832-8678-e93fd8e336ec}">
+                  <labels>
+                    <label description="General" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{fdbf6269-3d18-4bc3-9fc2-2b796a087669}">
+                        <labels>
+                          <label description="Name" languagecode="1033" />
+                        </labels>
+                        <control id="crb52_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="crb52_name" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b58e8d42-2818-4a74-b412-259cc5576046}">
+                        <labels>
+                          <label description="Owner" languagecode="1033" />
+                        </labels>
+                        <control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+        <tab name="tab_2" id="{eb62880a-a515-db30-642b-e1cd31787045}" IsUserDefined="0" locklevel="0" showlabel="true" expanded="true">
+          <labels>
+            <label description="Map" languagecode="1033" />
+          </labels>
+          <columns>
+            <column width="50%">
+              <sections>
+                <section name="tab_2_section_1" showlabel="false" showbar="false" locklevel="0" id="{c75e5633-ca81-ce34-2ed2-a922967879a8}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Section" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{39cb6953-831e-d0b1-cd7c-3e426b17b2ae}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="External Id" languagecode="1033" />
+                        </labels>
+                        <control id="crb52_externalid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="crb52_externalid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{ba14be4a-3599-5be6-8576-a4c2e19ad653}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="External Name" languagecode="1033" />
+                        </labels>
+                        <control id="crb52_externalname" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="crb52_externalname" disabled="false" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+            <column width="50%">
+              <sections>
+                <section name="tab_2_section_2" showlabel="false" showbar="false" locklevel="0" id="{68cd39b6-a69e-7279-0757-c37d9d53d167}" IsUserDefined="0" layout="varwidth" columns="1" labelwidth="115">
+                  <labels>
+                    <label description="Section" languagecode="1033" />
+                  </labels>
+                  <rows>
+                    <row>
+                      <cell id="{193033c2-97d2-e242-89a8-bec1ebe997c6}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="MSM Id" languagecode="1033" />
+                        </labels>
+                        <control id="crb52_msmid" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="crb52_msmid" disabled="false" />
+                      </cell>
+                    </row>
+                    <row>
+                      <cell id="{b1b655c6-0cc2-c892-904c-4e546a5c093a}" showlabel="true" locklevel="0">
+                        <labels>
+                          <label description="MSM Table / Choice" languagecode="1033" />
+                        </labels>
+                        <control id="crb52_msmtable" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="crb52_msmtable" disabled="false" uniqueid="{27bb26c8-860b-9798-56a6-d9d80cab0605}" />
+                      </cell>
+                    </row>
+                  </rows>
+                </section>
+              </sections>
+            </column>
+          </columns>
+        </tab>
+      </tabs>
+      <Navigation>
+        <NavBar></NavBar>
+        <NavBarAreas>
+          <NavBarArea Id="Info">
+            <Titles>
+              <Title LCID="1033" Text="Common" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Sales">
+            <Titles>
+              <Title LCID="1033" Text="Sales" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Service">
+            <Titles>
+              <Title LCID="1033" Text="Service" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="Marketing">
+            <Titles>
+              <Title LCID="1033" Text="Marketing" />
+            </Titles>
+          </NavBarArea>
+          <NavBarArea Id="ProcessCenter">
+            <Titles>
+              <Title LCID="1033" Text="Process Sessions" />
+            </Titles>
+          </NavBarArea>
+        </NavBarAreas>
+      </Navigation>
+      <controlDescriptions />
+    </form>
+    <IsCustomizable>1</IsCustomizable>
+    <CanBeDeleted>1</CanBeDeleted>
+    <LocalizedNames>
+      <LocalizedName description="Information" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="A form for this entity." languagecode="1033" />
+    </Descriptions>
+  </systemform>
+</forms>

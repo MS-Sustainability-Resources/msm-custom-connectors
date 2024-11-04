@@ -1,11 +1,12 @@
-<ImportExportXml version="9.2.24074.218" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.2.24094.228" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.24094.228" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.24094.00228">
   <SolutionManifest>
     <UniqueName>DemoConnector</UniqueName>
     <LocalizedNames>
       <LocalizedName description="Demo Connector" languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.0.9</Version>
+    <Version>1.0.0.10</Version>
     <Managed>0</Managed>
     <Publisher>
       <UniqueName>Cr26cae</UniqueName>
@@ -82,26 +83,26 @@
     </RootComponents>
     <MissingDependencies>
       <MissingDependency>
-        <Required type="1" schemaName="msdyn_dataconnection" displayName="Connection" solution="msdyn_SustainabilityApplication (2.22.0.159)">
-          <package>msdyn_SustainabilityPremiumAnchor (2.22.0.159)</package>
+        <Required type="1" schemaName="msdyn_dataconnection" displayName="Connection" solution="msdyn_SustainabilityApplication (2.23.0.313)">
+          <package>msdyn_SustainabilityPremiumAnchor (2.23.0.313)</package>
         </Required>
         <Dependent type="29" displayName="Connector Flow - Prepare and Submit Data" id="{ea207046-8f6f-ef11-a670-000d3a1f0de8}" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="1" schemaName="msdyn_dataconnectionrefresh" displayName="Connection refresh" solution="msdyn_SustainabilityApplication (2.22.0.159)">
-          <package>msdyn_SustainabilityPremiumAnchor (2.22.0.159)</package>
+        <Required type="1" schemaName="msdyn_dataconnectionrefresh" displayName="Connection refresh" solution="msdyn_SustainabilityApplication (2.23.0.313)">
+          <package>msdyn_SustainabilityPremiumAnchor (2.23.0.313)</package>
         </Required>
         <Dependent type="29" displayName="Connector Flow - Prepare and Submit Data" id="{ea207046-8f6f-ef11-a670-000d3a1f0de8}" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="1" schemaName="msdyn_dataimportjob" displayName="Data import job" solution="msdyn_SustainabilityApplication (2.22.0.159)">
-          <package>msdyn_SustainabilityPremiumAnchor (2.22.0.159)</package>
+        <Required type="1" schemaName="msdyn_dataimportjob" displayName="Data import job" solution="msdyn_SustainabilityApplication (2.23.0.313)">
+          <package>msdyn_SustainabilityPremiumAnchor (2.23.0.313)</package>
         </Required>
         <Dependent type="29" displayName="Connector Flow - Prepare and Submit Data" id="{ea207046-8f6f-ef11-a670-000d3a1f0de8}" />
       </MissingDependency>
       <MissingDependency>
-        <Required type="1" schemaName="msdyn_sustainabilitydataconnectionmap" displayName="Sustainability data connection map" solution="msdyn_SustainabilityApplication (2.22.0.159)">
-          <package>msdyn_SustainabilityPremiumAnchor (2.22.0.159)</package>
+        <Required type="1" schemaName="msdyn_sustainabilitydataconnectionmap" displayName="Sustainability data connection map" solution="msdyn_SustainabilityApplication (2.23.0.313)">
+          <package>msdyn_SustainabilityPremiumAnchor (2.23.0.313)</package>
         </Required>
         <Dependent type="29" displayName="Connector Flow - Prepare and Submit Data" id="{ea207046-8f6f-ef11-a670-000d3a1f0de8}" />
       </MissingDependency>
